@@ -12,10 +12,12 @@ export function createCabinet(material) {
     // تنظیمات
     //-------------------------
 
-    const width = 2.2;
-    const height = 3.5;
-    const depth = 0.7;
-    const board = 0.06;
+const board = 0.06;
+const width = 2.2;
+const height = 3.5;
+const depth = 0.7;
+
+
 
     //-------------------------
     // دیواره چپ

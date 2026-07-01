@@ -1,9 +1,7 @@
 
-
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-
-import "./style.css";
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import "./style.css";
 import { createCabinet } from "./objects/Cabinet";
 
 // Scene
@@ -18,7 +16,7 @@ const camera = new THREE.PerspectiveCamera(
     1000
 );
 
-// دوربین را روبروی کمد قرار می‌دهیم
+// دوربین
 camera.position.set(0, 1.5, 7);
 camera.lookAt(0, 1, 0);
 
@@ -84,8 +82,9 @@ scene.add(floor);
 // متریال چوب
 const material = new THREE.MeshStandardMaterial({
 
-    color:"#c69c6d"
-
+    color:"#ce6e00",
+    roughness:0.7,
+    metalness:0
 });
 
 // ساخت کمد
@@ -167,3 +166,9 @@ cabinet.userData.doors.children.forEach((door)=>{
 }
 
 animate();
+
+// این کد اجرا نمی‌شود
+
+// cd wardrobe-pro
+//cd
+// npm run dev
