@@ -1,33 +1,59 @@
 import * as THREE from "three";
-
 import { createShelves } from "./Shelf";
 import { createDoors } from "./Door";
 import { createDrawers } from "./Drawer";
 
-export function createCabinet(material) {
-
+export function createCabinet(config) {
     const cabinet = new THREE.Group();
+config = {
+
+    boardThickness:0.06,
+
+    shelfColor:config.bodyColor,
+
+    drawerColor:config.bodyColor,
+
+    doorColor:config.bodyColor,
+
+    ...config
+
+};
+    // ==========================
+    // CONFIG
+    // ==========================
+
+    
+    const width = config.width;
+
+    const height = config.height;
+
+    const depth = config.depth;
+
+    const board = config.boardThickness;
+
+    const bodyMaterial = new THREE.MeshStandardMaterial({
+
+        color: config.bodyColor
+
+    });
 
     //-------------------------
-    // تنظیمات
-    //-------------------------
-
-const board = 0.06;
-const width = 2.2;
-const height = 3.5;
-const depth = 0.7;
-
-
-
-    //-------------------------
-    // دیواره چپ
+    // LEFT
     //-------------------------
 
     const left = new THREE.Mesh(
 
-        new THREE.BoxGeometry(board, height, depth),
+        new THREE.BoxGeometry(
 
-        material
+            board,
+
+            height,
+
+            depth
+
+        ),
+
+        bodyMaterial
 
     );
 
@@ -38,7 +64,7 @@ const depth = 0.7;
     cabinet.add(left);
 
     //-------------------------
-    // دیواره راست
+    // RIGHT
     //-------------------------
 
     const right = left.clone();
@@ -48,25 +74,31 @@ const depth = 0.7;
     cabinet.add(right);
 
     //-------------------------
-    // سقف
+    // TOP
     //-------------------------
 
     const top = new THREE.Mesh(
 
-        new THREE.BoxGeometry(width, board, depth),
+        new THREE.BoxGeometry(
 
-        material
+            width,
+
+            board,
+
+            depth
+
+        ),
+
+        bodyMaterial
 
     );
 
     top.position.y = height / 2;
 
-    top.castShadow = true;
-
     cabinet.add(top);
 
     //-------------------------
-    // کف
+    // BOTTOM
     //-------------------------
 
     const bottom = top.clone();
@@ -76,7 +108,7 @@ const depth = 0.7;
     cabinet.add(bottom);
 
     //-------------------------
-    // پشت
+    // BACK
     //-------------------------
 
     const back = new THREE.Mesh(
@@ -104,7 +136,7 @@ const depth = 0.7;
     cabinet.add(back);
 
     //-------------------------
-    // طبقات
+    // SHELVES
     //-------------------------
 
     const shelves = createShelves({
@@ -115,18 +147,19 @@ const depth = 0.7;
 
         depth,
 
-        boardThickness: board,
+        count: config.shelfCount,
 
-        count: 4,
+        thickness: board,
 
-        material
+        sideThickness: board,
+
+        color: config.shelfColor
 
     });
 
     cabinet.add(shelves);
-
-    //-------------------------
-    // کشوها
+        //-------------------------
+    // DRAWERS
     //-------------------------
 
     const drawers = createDrawers({
@@ -137,14 +170,16 @@ const depth = 0.7;
 
         depth: depth * 0.9,
 
-        material
+        count: config.drawerCount,
+
+        color: config.drawerColor
 
     });
 
     cabinet.add(drawers);
 
     //-------------------------
-    // درب ها
+    // DOORS
     //-------------------------
 
     const doors = createDoors({
@@ -153,19 +188,31 @@ const depth = 0.7;
 
         height,
 
-        depth
+        depth,
+
+        color: config.doorColor,
+
+        thickness: 0.04,
+
+        handleColor: "#333333"
 
     });
 
     cabinet.add(doors);
 
+    //-------------------------
+    // USER DATA
+    //-------------------------
+
     cabinet.userData = {
 
-        doors,
+        config,
+
+        shelves,
 
         drawers,
 
-        shelves
+        doors
 
     };
 

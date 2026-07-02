@@ -1,17 +1,38 @@
 import * as THREE from "three";
 
 export function createShelves({
+
     width,
     height,
     depth,
-    boardThickness,
-    count,
-    material
+
+    count = 5,
+
+    thickness = 0.06,
+
+    color = "#d6a36d",
+
+    sideThickness = 0.06,
+
+    frontGap = 0.02,
+
+    topMargin = 0.30,
+
+    bottomMargin = 0.30
+
 }) {
 
     const shelves = new THREE.Group();
 
-    const usableHeight = height - 0.6;
+    const material = new THREE.MeshStandardMaterial({
+
+        color
+
+    });
+
+    const usableHeight =
+
+        height - topMargin - bottomMargin;
 
     const spacing = usableHeight / (count + 1);
 
@@ -21,11 +42,11 @@ export function createShelves({
 
             new THREE.BoxGeometry(
 
-                width - boardThickness * 2,
+                width - sideThickness * 2,
 
-                boardThickness,
+                thickness,
 
-                depth - 0.02
+                depth - frontGap
 
             ),
 
@@ -40,6 +61,8 @@ export function createShelves({
         shelf.position.y =
 
             -height / 2 +
+
+            bottomMargin +
 
             spacing * i;
 

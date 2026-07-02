@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import "./style.css";
 import { createCabinet } from "./objects/Cabinet";
-
+import { createUI } from "./ui";
 // Scene
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xf3f3f3);
@@ -86,12 +86,34 @@ const material = new THREE.MeshStandardMaterial({
     roughness:0.7,
     metalness:0
 });
+const config = {
 
+    width:2.4,
+
+    height:3.8,
+
+    depth:0.8,
+
+    bodyColor:"#d6a36d",
+
+    shelfCount:5,
+
+    drawerCount:4
+
+};
 // ساخت کمد
-const cabinet = createCabinet(material);
-
+let cabinet = createCabinet(config);
 scene.add(cabinet);
 
+createUI(config,(newConfig)=>{
+
+    scene.remove(cabinet);
+
+    cabinet=createCabinet(newConfig);
+
+    scene.add(cabinet);
+
+});
 // ------------------------
 // Mouse Raycaster
 // ------------------------
@@ -150,17 +172,28 @@ function animate(){
 
     requestAnimationFrame(animate);
 
-        controls.update();
+    controls.update();
 
-cabinet.userData.doors.children.forEach((door)=>{
+    cabinet.userData.doors.children.forEach((door)=>{
 
-    if(door.userData.animate){
+        if(door.userData.animate){
 
-        door.userData.animate();
+            door.userData.animate();
 
-    }
+        }
 
-});
+    });
+
+    cabinet.userData.drawers.children.forEach((drawer)=>{
+
+        if(drawer.userData.animate){
+
+            drawer.userData.animate();
+
+        }
+
+    });
+
     renderer.render(scene,camera);
 
 }
@@ -172,3 +205,7 @@ animate();
 // cd wardrobe-pro
 //cd
 // npm run dev
+//
+//git commit -m "Update cabinet color and size"
+//git commit -m "Update"
+//git push

@@ -1,33 +1,53 @@
 import * as THREE from "three";
 
-export function createDoors({ width, height, depth }) {
+export function createDoors({
+
+    width,
+    height,
+    depth,
+
+    color = "#d6a36d",
+    thickness = 0.04,
+    handleColor = "#222"
+
+}) {
 
     const doors = new THREE.Group();
 
     const material = new THREE.MeshStandardMaterial({
-        color: "#d6a36d"
+
+        color
+
     });
 
-    //-------------------
-    // LEFT DOOR
-    //-------------------
+    //-----------------------
+    // LEFT
+    //-----------------------
 
     const leftPivot = new THREE.Group();
 
     leftPivot.name = "leftDoor";
 
     leftPivot.position.set(
+
         -width / 2,
-        0.4,
-        depth / 2 + 0.02
+
+        0,
+
+        depth / 2 + thickness / 2
+
     );
 
     const leftDoor = new THREE.Mesh(
 
         new THREE.BoxGeometry(
+
             width / 2,
-            height - 0.8,
-            0.04
+
+            height,
+
+            thickness
+
         ),
 
         material
@@ -36,25 +56,51 @@ export function createDoors({ width, height, depth }) {
 
     leftDoor.position.x = width / 4;
 
-    leftDoor.castShadow = true;
-
     leftPivot.add(leftDoor);
+
+    const leftHandle = new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            0.03,
+
+            0.35,
+
+            0.03
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color: handleColor
+
+        })
+
+    );
+
+    leftHandle.position.set(
+
+        width / 2 - 0.08,
+
+        0,
+
+        thickness
+
+    );
+
+    leftDoor.add(leftHandle);
 
     leftPivot.userData = {
 
-        open: false,
+        open:false,
 
-        animate() {
+        animate(){
 
-            if (this.open) {
+            const target=this.open?-Math.PI/2:0;
 
-                leftPivot.rotation.y += (0 - leftPivot.rotation.y) * 0.12;
+            leftPivot.rotation.y+=
 
-            } else {
-
-                leftPivot.rotation.y += ((-Math.PI / 2) - leftPivot.rotation.y) * 0.12;
-
-            }
+            (target-leftPivot.rotation.y)*0.12;
 
         }
 
@@ -62,53 +108,87 @@ export function createDoors({ width, height, depth }) {
 
     doors.add(leftPivot);
 
-    //-------------------
-    // RIGHT DOOR
-    //-------------------
+    //-----------------------
+    // RIGHT
+    //-----------------------
 
-    const rightPivot = new THREE.Group();
+    const rightPivot=new THREE.Group();
 
-    rightPivot.name = "rightDoor";
+    rightPivot.name="rightDoor";
 
     rightPivot.position.set(
-        width / 2,
-        0.4,
-        depth / 2 + 0.02
+
+        width/2,
+
+        0,
+
+        depth/2+thickness/2
+
     );
 
-    const rightDoor = new THREE.Mesh(
+    const rightDoor=new THREE.Mesh(
 
         new THREE.BoxGeometry(
-            width / 2,
-            height - 0.8,
-            0.04
+
+            width/2,
+
+            height,
+
+            thickness
+
         ),
 
         material
 
     );
 
-    rightDoor.position.x = -width / 4;
-
-    rightDoor.castShadow = true;
+    rightDoor.position.x=-width/4;
 
     rightPivot.add(rightDoor);
 
-    rightPivot.userData = {
+    const rightHandle=new THREE.Mesh(
 
-        open: false,
+        new THREE.BoxGeometry(
 
-        animate() {
+            0.03,
 
-            if (this.open) {
+            0.35,
 
-                rightPivot.rotation.y += (0 - rightPivot.rotation.y) * 0.12;
+            0.03
 
-            } else {
+        ),
 
-                rightPivot.rotation.y += ((Math.PI / 2) - rightPivot.rotation.y) * 0.12;
+        new THREE.MeshStandardMaterial({
 
-            }
+            color:handleColor
+
+        })
+
+    );
+
+    rightHandle.position.set(
+
+        -width/2+0.08,
+
+        0,
+
+        thickness
+
+    );
+
+    rightDoor.add(rightHandle);
+
+    rightPivot.userData={
+
+        open:false,
+
+        animate(){
+
+            const target=this.open?Math.PI/2:0;
+
+            rightPivot.rotation.y+=
+
+            (target-rightPivot.rotation.y)*0.12;
 
         }
 
